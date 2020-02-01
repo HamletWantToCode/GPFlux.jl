@@ -5,7 +5,7 @@ Reference:
 """
 
 using Flux: glorot_uniform
-
+import Flux: functor
 
 """
 Primitive layer, constituted by basic kernels
@@ -50,6 +50,6 @@ function Product(x; step=2)
 	m, n = size(x)
 	m%step == 0 || error("the first dimension of inputs must be multiple of step")
 	new_x = reshape(x, m÷step, step, n)
-	dropdims(prod(new_x, dims=1), dims=2)
+	dropdims(prod(new_x, dims=2), dims=2)
 end
 

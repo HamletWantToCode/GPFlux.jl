@@ -24,3 +24,15 @@ function inner_prod_metric_back(x, sym_dD)
 	dx
 end
 
+function inner_prod_metric(x, xo)
+	N1 = size(x, 2)
+	N2 = size(xo, 2)
+	D = zeros(eltype(x), N1, N2)
+	@inbounds for i in 1:N1
+		for j in 1:N2
+			D[i,j] = dot(view(x, :, i), view(xo, :, j))
+		end
+	end
+	D
+end
+

@@ -27,3 +27,17 @@ function square_metric_back(x, sym_dD)
   end
   dx
 end
+
+function square_metric(x, xo)
+	N1 = size(x, 2)
+	N2 = size(xo, 2)
+	D = zeros(eltype(x), N1, N2)
+	@inbounds for i in 1:N1
+		for j in 1:N2
+			dx = norm(view(x, :, i) .- view(xo, :, j))
+			D[i,j] = dx * dx
+		end
+	end
+	D
+end
+

@@ -3,15 +3,23 @@ module DiffGP
 using LinearAlgebra
 using BackwardsLinalg
 using Flux
-using Flux: @functor, functor, params
+using Flux: @functor, params
 import Base: reset
+import Distributions: MvNormal
 
-export GaussProcess, negloglik, 
-			 ConstantMean, SimpleNeuralNetworkMean, 
-			 GaussKernel, IsoGaussKernel,
-			 RQKernel, IsoRQKernel,
-			 IsoPeriodKernel, LinearKernel,
-			 params
+
+export GaussProcess, MvNormal, negloglik, predict, params
+
+export ConstantMean, SimpleNeuralNetworkMean 
+			 
+export ArdGaussKernel, IsoGaussKernel,
+			 ArdRQKernel, IsoRQKernel,
+			 ArdLinearKernel, IsoLinearKernel,
+			 IsoPeriodKernel
+
+export ProductCompositeKernel, AddCompositeKernel,
+			 SE_mul_PeriodKernel, Lin_mul_LinKernel, Period_mul_LinKernel, SE_mul_LinKernel,
+			 SE_add_PeriodKernel
 
 export Primitive, Linear, Product, positive 
 
@@ -20,35 +28,11 @@ export norm2_metric, square_metric, inner_prod_metric
 export gradient_check, model_gradient_check, reset
 
 
-
-# Gauss process 
-struct GaussProcess{MT, KT}
-	mean::MT
-	kernel::KT
-end
-@functor GaussProcess
-
-
-# loss function 
-function negloglik(gp::GaussProcess, x, y)
-	μ = reshape(gp.mean(x), size(y))
-  Σ = gp.kernel(x)
-
-  d = length(y)
-  L = BackwardsLinalg.cholesky(Σ)
-	ȳ = y .- μ
-	z = L \ ȳ
-	z̄ = L' \ z
-  0.5*dot(ȳ, z̄) + (d/2.0)*log(2π) + logdet(L)
-end
-
-
+include("gp.jl")
 include("mean.jl")
-include("kernel.jl")
 include("layers.jl")
-include("norm2_metric.jl")
-include("square_metric.jl")
-include("inner_prod_metric.jl")
+include("kernels/kernels.jl")
+include("metrics/metrics.jl")
 include("zygote.jl")
 
 end # module
