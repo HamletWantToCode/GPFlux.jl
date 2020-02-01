@@ -19,7 +19,7 @@ using Test, Random
 		isorq_kernel = IsoRQKernel()
 		isoperiod_kernel = IsoPeriodKernel()
 		linear_kernel = LinearKernel(m)
-		wn_kernel = WhiteNoiseKernel()
+		# wn_kernel = WhiteNoiseKernel()
  		# c_kernel = ConstantKernel()
 		kernels = [rbf_kernel, isorbf_kernel, rq_kernel, isorq_kernel, isoperiod_kernel, linear_kernel, wn_kernel]
 
@@ -29,8 +29,9 @@ using Test, Random
 		@show isposdef(isorq_kernel(X))
 		@show isposdef(isoperiod_kernel(X))
 		@show isposdef(linear_kernel(X))
-		@show isposdef(wn_kernel(X))
+		# @show isposdef(wn_kernel(X))
 		# @show isposdef(c_kernel(X))
 		@test all([isposdef(K(X)) for K in kernels])
 	end
 end
+

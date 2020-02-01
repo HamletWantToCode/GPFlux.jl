@@ -53,3 +53,15 @@ function Product(x; step=2)
 	dropdims(prod(new_x, dims=2), dims=2)
 end
 
+
+"""
+common used all product and all sum
+"""
+function allProduct(x)
+	dropdims(prod(x, dims=1), dims=1)
+end
+
+function allSum(x)
+	dropdims(sum(x, dims=1), dims=1)
+end
+

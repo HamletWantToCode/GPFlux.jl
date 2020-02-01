@@ -1,27 +1,30 @@
 """
 composite kernel
 """
-struct ProductCompositeKernel{KT1, KT2}
-	K1::KT1
-	K2::KT2
+
+import Flux: functor
+
+
+struct ProductCompositeKernel{T<:Tuple}
+	kernels::T
 end
-@functor ProductCompositeKernel
+ProductCompositeKernel(ks...) = ProductCompositeKernel{typeof(ks)}(ks) 
+functor(pck::ProductCompositeKernel) = pck.kernels, ks->ProductCompositeKernel(ks...)
 function (PCK::ProductCompositeKernel)(x; λ=1e-6)
 	N = size(x, 2)
-	K = Chain(Primitive(PCK.K1, PCK.K2), Product, z->reshape(z, N, N))
+	K = Chain(Primitive(PCK.kernels...), allProduct, z->reshape(z, N, N))
 	K(x) + Diagonal(λ*ones(N))
 end
 
 
-struct AddCompositeKernel{KT1, KT2, LT}
-	K1::KT1
-	K2::KT2
-	Lin::LT
+struct AddCompositeKernel{T<:Tuple}
+	kernels::T
 end
-@functor AddCompositeKernel
+AddCompositeKernel(ks...) = AddCompositeKernel{typeof(ks)}(ks)
+functor(ack::AddCompositeKernel) = ack.kernels, ks->AddCompositeKernel(ks...)
 function (ACK::AddCompositeKernel)(x; λ=1e-6)
 	N = size(x, 2)
-	K = Chain(Primitive(ACK.K1, ACK.K2), ACK.Lin, z->reshape(z, N, N))
+	K = Chain(Primitive(ACK.kernels...), allSum, z->reshape(z, N, N))
 	K(x) + Diagonal(λ*ones(N))
 end
 
@@ -30,10 +33,10 @@ end
 """
 common composite kernels
 """
-const SE_mul_PeriodKernel = ProductCompositeKernel{IsoGaussKernel, IsoPeriodKernel}
-const Lin_mul_LinKernel = ProductCompositeKernel{IsoLinearKernel, IsoLinearKernel}
-const Period_mul_LinKernel = ProductCompositeKernel{IsoPeriodKernel, IsoLinearKernel}
-const SE_mul_LinKernel = ProductCompositeKernel{IsoGaussKernel, IsoLinearKernel}
+const SE_mul_PeriodKernel = ProductCompositeKernel{Tuple{IsoGaussKernel, IsoPeriodKernel}}
+const Lin_mul_LinKernel = ProductCompositeKernel{Tuple{IsoLinearKernel, IsoLinearKernel}}
+const Period_mul_LinKernel = ProductCompositeKernel{Tuple{IsoPeriodKernel, IsoLinearKernel}}
+const SE_mul_LinKernel = ProductCompositeKernel{Tuple{IsoGaussKernel, IsoLinearKernel}}
 
-const SE_add_PeriodKernel = AddCompositeKernel{IsoGaussKernel, IsoPeriodKernel, Linear}
+const SE_add_PeriodKernel = AddCompositeKernel{Tuple{IsoGaussKernel, IsoPeriodKernel}}
 

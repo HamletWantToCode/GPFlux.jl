@@ -21,7 +21,7 @@ export ProductCompositeKernel, AddCompositeKernel,
 			 SE_mul_PeriodKernel, Lin_mul_LinKernel, Period_mul_LinKernel, SE_mul_LinKernel,
 			 SE_add_PeriodKernel
 
-export Primitive, Linear, Product, positive 
+export Primitive, Linear, Product, allProduct, allSum, positive 
 
 export norm2_metric, square_metric, inner_prod_metric
 
