@@ -1,4 +1,4 @@
-module DiffGP
+module GPFlux
 
 using LinearAlgebra
 using BackwardsLinalg

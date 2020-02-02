@@ -1,5 +1,5 @@
 using LinearAlgebra
-using DiffGP
+using GPFlux
 using Zygote
 using Random
 using GaussianProcesses

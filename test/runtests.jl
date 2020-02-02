@@ -1,6 +1,14 @@
-using DiffGP
 using Test
 
-@testset "DiffGP.jl" begin
-    # Write your own tests here.
+
+@testset "metric" begin
+	include("metric.jl")
+end
+
+@testset "kernel" begin
+	include("kernel.jl")
+end
+
+@testset "negloglik" begin
+	include("negloglik.jl")
 end

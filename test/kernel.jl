@@ -1,4 +1,4 @@
-using DiffGP
+using GPFlux
 using LinearAlgebra
 using GaussianProcesses
 using Statistics
@@ -18,7 +18,7 @@ end
 function dKdθ_check(mykernel, gpkernel, X, v)
   N = size(X, 2)
   
-  myps = DiffGP.params(mykernel)
+  myps = GPFlux.params(mykernel)
   f = () -> v'*mykernel(X)*v
   mygs = gradient(f, myps)
   mygv = [mygs.grads[p][1] for p in myps]

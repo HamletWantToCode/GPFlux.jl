@@ -1,9 +1,9 @@
-using DiffGP
+using GPFlux
 using LinearAlgebra
 using Test, Random
 
 
-@testset "norm2_metric" begin
+@testset "inner_prod_metric" begin
   Random.seed!(3)
   T = Float64
 	for N in [2, 4, 7]
@@ -12,7 +12,7 @@ using Test, Random
 		v = rand(T, N)
 
     function tfunc(x)
-			D = norm2_metric(x)
+			D = inner_prod_metric(x)
 			(v'*Symmetric(D, :L)*v)[] |> real
     end
     @test gradient_check(tfunc, X)

@@ -1,4 +1,4 @@
-using DiffGP
+using GPFlux
 using LinearAlgebra
 using Test, Random
 

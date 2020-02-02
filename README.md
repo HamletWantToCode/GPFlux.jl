@@ -1,1 +1,1 @@
-# DiffGP
+# GPFlux

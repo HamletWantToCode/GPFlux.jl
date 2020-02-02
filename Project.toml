@@ -1,4 +1,4 @@
-name = "DiffGP"
+name = "GPFlux"
 uuid = "4d4e40ad-7e7d-4024-a1b1-ebf43adef3b8"
 authors = ["hongbinren <hongbinrenscu@outlook.com>"]
 version = "0.1.0"
