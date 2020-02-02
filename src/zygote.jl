@@ -33,11 +33,11 @@ end
 # gradient check for models
 function model_gradient_check(f, ps; η = 1e-5)
     g = gradient(f, ps)
-    dy_expect = η*sum([sum(abs2.(gp)) for gp in values(g.grads)])
+    dy_expect = η*sum([gp == nothing ? 0.0 : sum(abs2.(gp)) for gp in values(g.grads)])
 
     f_original = f()
     for p in ps
-        Optimise.update!(p, -η.*g[p])
+			g[p] == nothing ? continue : Optimise.update!(p, -η.*g[p])
     end
     f_new = f()
     dy = f_original - f_new

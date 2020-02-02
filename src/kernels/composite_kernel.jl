@@ -15,7 +15,11 @@ function (PCK::ProductCompositeKernel)(x; λ=1e-6)
 	K = Chain(Primitive(PCK.kernels...), allProduct, z->reshape(z, N, N))
 	K(x) + Diagonal(λ*ones(N))
 end
-
+function (PCK::ProductCompositeKernel)(x, xo)
+	M, N = size(x, 2), size(xo, 2)
+	K = Chain(Primitive(PCK.kernels...), allProduct, z->reshape(z, M, N))
+	K(x, xo)
+end
 
 struct AddCompositeKernel{T<:Tuple}
 	kernels::T
@@ -27,7 +31,11 @@ function (ACK::AddCompositeKernel)(x; λ=1e-6)
 	K = Chain(Primitive(ACK.kernels...), allSum, z->reshape(z, N, N))
 	K(x) + Diagonal(λ*ones(N))
 end
-
+function (ACK::AddCompositeKernel)(x, xo)
+	M, N = size(x, 2), size(xo, 2)
+	K = Chain(Primitive(ACK.kernels...), allSum, z->reshape(z, M, N))
+	K(x, xo)
+end
 
 
 """

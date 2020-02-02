@@ -4,8 +4,10 @@ Reference:
  Differentiable Compositional Kernel Learning for Gaussian Processes
 """
 
+using Base: tail
 using Flux: glorot_uniform
-import Flux: functor
+import Flux: functor, Chain, applychain
+
 
 """
 Primitive layer, constituted by basic kernels
@@ -20,6 +22,17 @@ function (p::Primitive)(x)
 	Ks = [reshape(Ker(x), 1, :) for Ker in p.kernels]
 	vcat(Ks...)
 end
+function (p::Primitive)(x, xo)
+	Ks = [reshape(Ker(x, xo), 1, :) for Ker in p.kernels]
+	vcat(Ks...)
+end
+
+
+"""
+extend Chain
+"""
+applychain(fs::Tuple, x, xo) = applychain(tail(fs), first(fs)(x, xo))
+(c::Chain)(x, xo) = applychain(c.layers, x, xo)
 
 
 """
@@ -49,19 +62,20 @@ Product layer
 function Product(x; step=2)
 	m, n = size(x)
 	m%step == 0 || error("the first dimension of inputs must be multiple of step")
-	new_x = reshape(x, m÷step, step, n)
-	dropdims(prod(new_x, dims=2), dims=2)
+	new_x = reshape(x, step, m÷step, n)
+	.*([x[i, :, :] for i in 1:step]...)
 end
 
 
 """
 common used all product and all sum
 """
-function allProduct(x)
-	dropdims(prod(x, dims=1), dims=1)
-end
+# not use `prod` here, since it'll results in unknown overflow in backpropogation
+allProduct(x) = .*([x[i,:] for i in 1:size(x, 1)]...)
 
+# similar reason, not use `sum`
 function allSum(x)
-	dropdims(sum(x, dims=1), dims=1)
+	m = size(x, 1)
+	v = ones(eltype(x), m)
+	v'*x
 end
-
