@@ -5,9 +5,9 @@ A new Gaussian process package, compare to existing ones ([GaussianProcesses.jl]
 This package is still under development, **suggestions**, **bug report** and **pull request** are welcome :)
 
 ## Installation
-Currently, installing GPFlux requires run the following code in a Julia REPL:
+Installing GPFlux requires run the following code in a Julia REPL:
 ```julia
-] add git@github.com:HamletWantToCode/GPFlux.git
+] add GPFlux
 ```
 and also install BackwardsLinalg by
 ```julia
@@ -19,7 +19,7 @@ and also install BackwardsLinalg by
 
 
 ## Examples
-For details, please see [notebooks](https://github.com/HamletWantToCode/GPFlux/tree/master/notebook).
+For details, please see [notebooks](https://github.com/HamletWantToCode/GPFlux.jl/tree/master/notebook).
 ### Simple regression
 
 ### Time series prediction
