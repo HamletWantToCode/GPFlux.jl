@@ -19,7 +19,7 @@ and also install BackwardsLinalg by
 
 
 ## Examples
-For details, please see notebooks.
+For details, please see [notebooks](https://github.com/HamletWantToCode/GPFlux/tree/master/notebook).
 ### Simple regression
 
 ### Time series prediction
