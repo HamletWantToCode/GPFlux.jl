@@ -1,17 +1,21 @@
 # GPFlux.jl
 
-A new Gaussian process package, compare to existing ones (GaussianProcesses.jl, Stheno.jl), it use Zygote to compute derivatives w.r.t model parameters, and is also compatible with Flux, which enables user to integrate deep neural network into Gaussian process model (e.g. use neural network as mean function or kernel function).
+A new Gaussian process package, compare to existing ones ([GaussianProcesses.jl](https://github.com/STOR-i/GaussianProcesses.jl.git), [Stheno.jl](https://github.com/willtebbutt/Stheno.jl.git)), it use [Zygote](https://github.com/FluxML/Zygote.jl.git) to compute derivatives w.r.t model parameters, and is also compatible with [Flux](https://github.com/FluxML/Flux.jl.git), which enables user to integrate deep neural network into Gaussian process model (e.g. use neural network as mean function or kernel function).
 
 This package is still under development, **suggestions**, **bug report** and **pull request** are welcome :)
 
 ## Installation
-To install GPFlux.jl, please run the following code in a Julia REPL:
+Currently, installing GPFlux requires run the following code in a Julia REPL:
 ```julia
-] add GPFlux
+] add git@github.com:HamletWantToCode/GPFlux.git
+```
+and also install BackwardsLinalg by
+```julia
+] add git@github.com:HamletWantToCode/BackwardsLinalg.jl.git
 ```
 
 ## Brief introduction to GP
-Gaussian processe is a powerful algorithm in statistical machine learning and probabilistic modelling, it models the underlying distribution of a dataset by a prior belief ( which is a parametrized multivariate normal distribution ) and a Gaussian likelihood, learning is done by maximizing the log likelihood (MLE), which is tractable for Gaussian process. Gaussian process is widely used in surrogate function modelling, geostatitics, pattern recognition, etc.
+[Gaussian processe](http://www.gaussianprocess.org/gpml/chapters/RW1.pdf) is a powerful algorithm in statistical machine learning and probabilistic modelling, it models the underlying distribution of a dataset by a prior belief ( which is a parametrized multivariate normal distribution ) and a Gaussian likelihood, learning is done by maximizing the log likelihood (MLE), which is tractable for Gaussian process. Gaussian process is widely used in surrogate function modelling, geostatitics, pattern recognition, etc.
 
 
 ## Examples
@@ -72,4 +76,4 @@ negloglik(nn_gp, X, y)
 gradient(()->negloglik(nn_gp, X, y), params(nn_gp))
 ```
 
-Once we have negative log likelihood and gradients, we can either use Optim.jl or Flux's optimizers to do optimization.
+Once we have negative log likelihood and gradients, we can either use [Optim.jl](https://github.com/JuliaNLSolvers/Optim.jl.git) or Flux's optimizers to do optimization.
