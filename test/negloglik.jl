@@ -22,19 +22,17 @@ using Test
 	CST = GaussianProcesses.FullCovariance()
 	GaussianProcesses.update_mll_and_dmll!(gp_gp, PT)
 	gp_nll = -gp_gp.mll
-	gp_grads = -gp_gp.dmll .* exp.(-GaussianProcesses.get_params(gp_gp))
+	gp_grads = -gp_gp.dmll
 
 	# GPFlux GP
 	zmean = ConstantMean()
-	se_kernel = IsoGaussKernel([exp(4.0)], [exp(3.0)])
-	noise2 = [exp(-2.0)]
+	se_kernel = IsoGaussKernel([4.0], [3.0])
+	noise2 = [-1.0]
 	gp = GaussProcess(zmean, se_kernel, noise2)
 	ps = params(gp)
 	my_nll = negloglik(gp, X, y)
 	gs = gradient(()->negloglik(gp, X, y), ps)
-	extra_factor = [p == noise2 ? 2*exp(-1.0) : 1.0 for p in ps if p!=[0.0]]
 	my_grads = [gs[p][1] for p in ps if p!=[0.0]]
-	my_grads = my_grads .* extra_factor
 	
 	@show gp_nll
 	@show my_nll

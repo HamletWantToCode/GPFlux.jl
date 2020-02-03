@@ -1,61 +1,62 @@
 """
 RBF Kernel
+	all parameters are in log-scale
 """
 struct ArdGaussKernel{T, VT<:AbstractVector{T}}
-	l::VT
-	σ::VT
+	ll::VT
+	lσ::VT
 end
 @functor ArdGaussKernel
 function (GK::ArdGaussKernel{T, VT})(x; λ=T(1e-6)) where {T, VT}
-	length(GK.l) == size(x, 1) || throw(DimensionMismatch("size of length scale parameter should be the same as number of features"))
+	length(GK.ll) == size(x, 1) || throw(DimensionMismatch("size of length scale parameter should be the same as number of features"))
 	n = size(x, 2)
-	scaled_x = x ./ GK.l 
+	scaled_x = @. x*exp(-GK.ll) 
 	d = square_metric(scaled_x)
-	σ_square = GK.σ[1]*GK.σ[1]
+	σ_square = exp(2*GK.lσ[1])
 	(@. σ_square*exp(-0.5*d)) + Diagonal(λ*ones(n))
 end
 function (GK::ArdGaussKernel{T, VT})(x, xo) where {T, VT}
-	σ_square = GK.σ[1]*GK.σ[1]
-	scaled_x = x ./ GK.l
-	scaled_xo = xo ./ GK.l
+	σ_square = exp(2*GK.lσ[1])
+	scaled_x = @. x*exp(-GK.ll)
+	scaled_xo = @. xo*exp(-GK.ll)
 	d = square_metric(scaled_x, scaled_xo)
 	@. σ_square*exp(-0.5*d)
 end
 
 function ArdGaussKernel(n_features::Int)
-	l = rand(n_features)
-	σ = rand(1)
-	ArdGaussKernel(l, σ)
+	ll = rand(n_features)
+	lσ = rand(1)
+	ArdGaussKernel(ll, lσ)
 end
 
-reset(GK::ArdGaussKernel) = ArdGaussKernel(length(GK.l))
+reset(GK::ArdGaussKernel) = ArdGaussKernel(length(GK.ll))
 
 
 ## iso kernel
 struct IsoGaussKernel{T, VT<:AbstractVector{T}}
-	l::VT
-	σ::VT
+	ll::VT
+	lσ::VT
 end
 @functor IsoGaussKernel
 function (IsoGK::IsoGaussKernel{T, VT})(x; λ=T(1e-6)) where {T, VT}
 	n = size(x, 2)
-	scaled_x = x ./ IsoGK.l[1] 
+	scaled_x = x .* exp(-IsoGK.ll[1]) 
 	d = square_metric(scaled_x)
-	σ_square = IsoGK.σ[1]*IsoGK.σ[1]
+	σ_square = exp(2*IsoGK.lσ[1])
 	(@. σ_square*exp(-0.5*d)) + Diagonal(λ*ones(n))
 end
 function (IsoGK::IsoGaussKernel{T, VT})(x, xo) where {T, VT}
-	σ_square = IsoGK.σ[1]*IsoGK.σ[1]
-	scaled_x = x ./ IsoGK.l[1]
-	scaled_xo = xo ./ IsoGK.l[1]
+	σ_square = exp(2*IsoGK.lσ[1])
+	scaled_x = x .* exp(-IsoGK.ll[1])
+	scaled_xo = xo .* exp(-IsoGK.ll[1])
 	d = square_metric(scaled_x, scaled_xo)
 	@. σ_square*exp(-0.5*d)
 end
 
 function IsoGaussKernel()
-	l = rand(1)
-	σ = rand(1)
-	IsoGaussKernel(l, σ)
+	ll = rand(1)
+	lσ = rand(1)
+	IsoGaussKernel(ll, lσ)
 end
 
 reset(IsoGK::IsoGaussKernel) = IsoGaussKernel()

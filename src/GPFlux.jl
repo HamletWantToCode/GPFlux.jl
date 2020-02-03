@@ -8,7 +8,7 @@ import Base: reset
 import Distributions: MvNormal
 
 
-export GaussProcess, MvNormal, negloglik, predict, params
+export GaussProcess, MvNormal, negloglik, predict, params, dispatch!, flatten_params
 
 export ConstantMean, SimpleNeuralNetworkMean 
 			 
@@ -21,7 +21,7 @@ export ProductCompositeKernel, AddCompositeKernel,
 			 SE_mul_PeriodKernel, Lin_mul_LinKernel, Period_mul_LinKernel, SE_mul_LinKernel,
 			 SE_add_PeriodKernel
 
-export Chain, Primitive, Linear, Product, allProduct, allSum, positive 
+export Chain, Primitive, Linear, Product, allProduct, allSum 
 
 export norm2_metric, square_metric, inner_prod_metric
 

@@ -19,6 +19,14 @@ end
 	positive(x), dy -> (positive_back(x, dy),)
 end
 
+power(x, α) = x.^α
+@adjoint function power(x, α)
+	y = power(x, α)
+	y, function (dy)
+		α*(@. dy*x^(α-1)), tr(dy'* (@. y*log(x)))
+	end
+end
+
 
 # gradient check for functions
 function gradient_check(f, args...; η = 1e-5)

@@ -2,33 +2,31 @@
 Iso Periodic kernel
 """
 struct IsoPeriodKernel{T, VT<:AbstractVector{T}}
-	p::VT
-	l::VT
-	σ::VT
+	lp::VT
+	ll::VT
+	lσ::VT
 end
 @functor IsoPeriodKernel
 function (IsoPK::IsoPeriodKernel{T, VT})(x; λ=T(1e-6)) where {T, VT}
 	n = size(x, 2)
-	scaled_x = x ./ IsoPK.p[1]
+	scaled_x = x .* exp(-IsoPK.lp[1])
 	d = norm2_metric(scaled_x)
-	σ_square = IsoPK.σ[1]*IsoPK.σ[1]
-	l_square = IsoPK.l[1]*IsoPK.l[1]
-	(@. σ_square*exp(-2.0*sinpi(d)*sinpi(d)/l_square)) + Diagonal(λ*ones(n))
+	σ_square = exp(2*IsoPK.lσ[1])
+	(@. σ_square*exp(-2.0*sinpi(d)*sinpi(d)*exp(-2*IsoPK.ll[1]))) + Diagonal(λ*ones(n))
 end
 function (IsoPK::IsoPeriodKernel{T, VT})(x, xo) where {T, VT}
-	scaled_x = x ./ IsoPK.p[1]
-	scaled_xo = xo ./ IsoPK.p[1]
+	scaled_x = x .* exp(-IsoPK.lp[1])
+	scaled_xo = xo .* exp(-IsoPK.lp[1])
 	d = norm2_metric(scaled_x, scaled_xo)
-	σ_square = IsoPK.σ[1]*IsoPK.σ[1]
-	l_square = IsoPK.l[1]*IsoPK.l[1]
-	@. σ_square*exp(-2.0*sinpi(d)*sinpi(d)/l_square)
+	σ_square = exp(2*IsoPK.lσ[1])
+	@. σ_square*exp(-2.0*sinpi(d)*sinpi(d)*exp(-2*IsoPK.ll[1]))
 end
 
 function IsoPeriodKernel()
-	p = 1.0 ./ rand(1)
-	l = rand(1)
-	σ = rand(1)
-	IsoPeriodKernel(p, l, σ)
+	lp = 1.0 ./ rand(1)
+	ll = rand(1)
+	lσ = rand(1)
+	IsoPeriodKernel(lp, ll, lσ)
 end
 
 reset(IsoPK::IsoPeriodKernel) = IsoPeriodKernel()
