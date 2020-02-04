@@ -9,7 +9,7 @@ using Test, Random
 
 function K_check(mykernel, gpkernel, X)
   myK = mykernel(X)
-  gpK = cov(gpkernel, X)
+	gpK = cov(gpkernel, X) + Diagonal(1e-6*ones(size(X, 2)))
 	@show isposdef(myK)
 	@show isposdef(gpK)
 	isposdef(myK) == isposdef(gpK) &&  isapprox(myK, gpK, rtol=1e-3, atol=1e-8) 
@@ -56,8 +56,9 @@ end
 	kernel_pairs = [(IsoGaussKernel([4.0], [1.0]), SE(4.0, 1.0)),
 									(IsoPeriodKernel([0.0], [0.0], [1.0]), Periodic(0.0, 1.0, 0.0)),
 									(IsoRQKernel([0.0], [-1.0], [0.0]), RQ(0.0, 0.0, -1.0)),
-								  (SE_add_PeriodKernel((IsoGaussKernel([4.0],[0.0]),IsoPeriodKernel([0.0],[0.0],[1.0]))), SE(4.0,0.0)+Periodic(0.0,1.0,0.0)),
-									(SE_mul_PeriodKernel((IsoGaussKernel([4.0],[0.0]),IsoPeriodKernel([0.0],[0.0],[1.0]))), SE(4.0,0.0)*Periodic(0.0,1.0,0.0)),
+									(IsoLinearKernel([0.0]), Lin(0.0)),
+								  (SE_add_PeriodKernel(IsoGaussKernel([4.0],[0.0]),IsoPeriodKernel([0.0],[0.0],[1.0])), SE(4.0,0.0)+Periodic(0.0,1.0,0.0)),
+									(SE_mul_PeriodKernel(IsoGaussKernel([4.0],[0.0]),IsoPeriodKernel([0.0],[0.0],[1.0])), SE(4.0,0.0)*Periodic(0.0,1.0,0.0)),
 									]
 
 	for (mykernel, gpkernel) in kernel_pairs

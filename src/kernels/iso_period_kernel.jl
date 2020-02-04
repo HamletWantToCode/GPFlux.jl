@@ -1,7 +1,7 @@
 """
 Iso Periodic kernel
 """
-struct IsoPeriodKernel{T, VT<:AbstractVector{T}}
+struct IsoPeriodKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	lp::VT
 	ll::VT
 	lσ::VT

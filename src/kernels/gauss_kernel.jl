@@ -2,7 +2,7 @@
 RBF Kernel
 	all parameters are in log-scale
 """
-struct ArdGaussKernel{T, VT<:AbstractVector{T}}
+struct ArdGaussKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	ll::VT
 	lσ::VT
 end
@@ -33,7 +33,7 @@ reset(GK::ArdGaussKernel) = ArdGaussKernel(length(GK.ll))
 
 
 ## iso kernel
-struct IsoGaussKernel{T, VT<:AbstractVector{T}}
+struct IsoGaussKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	ll::VT
 	lσ::VT
 end

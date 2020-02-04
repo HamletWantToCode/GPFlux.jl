@@ -1,50 +1,37 @@
 """
-composite kernel
+general composite kernel
 """
 
-import Flux: functor
+const ProductCompositeKernel = NeuralKernelNetwork{Tuple{Primitive, typeof(allProduct)}}
 
-
-struct ProductCompositeKernel{T<:Tuple}
-	kernels::T
-end
-ProductCompositeKernel(ks...) = ProductCompositeKernel{typeof(ks)}(ks) 
-functor(pck::ProductCompositeKernel) = pck.kernels, ks->ProductCompositeKernel(ks...)
-function (PCK::ProductCompositeKernel)(x; λ=1e-6)
-	N = size(x, 2)
-	K = Chain(Primitive(PCK.kernels...), allProduct, z->reshape(z, N, N))
-	K(x) + Diagonal(λ*ones(N))
-end
-function (PCK::ProductCompositeKernel)(x, xo)
-	M, N = size(x, 2), size(xo, 2)
-	K = Chain(Primitive(PCK.kernels...), allProduct, z->reshape(z, M, N))
-	K(x, xo)
-end
-
-struct AddCompositeKernel{T<:Tuple}
-	kernels::T
-end
-AddCompositeKernel(ks...) = AddCompositeKernel{typeof(ks)}(ks)
-functor(ack::AddCompositeKernel) = ack.kernels, ks->AddCompositeKernel(ks...)
-function (ACK::AddCompositeKernel)(x; λ=1e-6)
-	N = size(x, 2)
-	K = Chain(Primitive(ACK.kernels...), allSum, z->reshape(z, N, N))
-	K(x) + Diagonal(λ*ones(N))
-end
-function (ACK::AddCompositeKernel)(x, xo)
-	M, N = size(x, 2), size(xo, 2)
-	K = Chain(Primitive(ACK.kernels...), allSum, z->reshape(z, M, N))
-	K(x, xo)
-end
+const AddCompositeKernel = NeuralKernelNetwork{Tuple{Primitive, typeof(allSum)}}
 
 
 """
-common composite kernels
+special composite kernels
 """
-const SE_mul_PeriodKernel = ProductCompositeKernel{Tuple{IsoGaussKernel, IsoPeriodKernel}}
-const Lin_mul_LinKernel = ProductCompositeKernel{Tuple{IsoLinearKernel, IsoLinearKernel}}
-const Period_mul_LinKernel = ProductCompositeKernel{Tuple{IsoPeriodKernel, IsoLinearKernel}}
-const SE_mul_LinKernel = ProductCompositeKernel{Tuple{IsoGaussKernel, IsoLinearKernel}}
+function SE_mul_PeriodKernel(k1::IsoGaussKernel, k2::IsoPeriodKernel)
+	pk = Primitive(k1, k2)
+	ProductCompositeKernel(pk, allProduct)
+end
 
-const SE_add_PeriodKernel = AddCompositeKernel{Tuple{IsoGaussKernel, IsoPeriodKernel}}
+function Lin_mul_LinKernel(k1::IsoLinearKernel, k2::IsoLinearKernel)
+	pk = Primitive(k1, k2)
+	ProductCompositeKernel(pk, allProduct)
+end
+
+function Period_mul_LinKernel(k1::IsoPeriodKernel, k2::IsoLinearKernel)
+	pk = Primitive(k1, k2)
+	ProductCompositeKernel(pk, allProduct)
+end
+
+function SE_mul_LinKernel(k1::IsoGaussKernel, k2::IsoLinearKernel)
+	pk = Primitive(k1, k2)
+	ProductCompositeKernel(pk, allProduct)
+end
+
+function SE_add_PeriodKernel(k1::IsoGaussKernel, k2::IsoPeriodKernel)
+	pk = Primitive(k1, k2)
+	AddCompositeKernel(pk, allSum)
+end
 

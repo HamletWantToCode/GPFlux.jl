@@ -6,7 +6,39 @@ Reference:
 
 using Base: tail
 using Flux: glorot_uniform
-import Flux: functor, Chain, applychain
+import Flux: functor
+
+
+"""
+Neural Kernel Network
+modify https://github.com/FluxML/Flux.jl/tree/master/src/layers/basic.jl Chain
+"""
+struct NeuralKernelNetwork{T<:Tuple}
+	layers::T
+end
+NeuralKernelNetwork(ls...) = NeuralKernelNetwork{typeof(ls)}(ls)
+NeuralKernelNetwork{T}(ls...) where {T<:Tuple} = NeuralKernelNetwork{T}(ls)
+
+functor(nkn::NeuralKernelNetwork) = nkn.layers, ls->NeuralKernelNetwork(ls...)
+
+applynkn(::Tuple{}, x) = x
+applynkn(fs::Tuple, x) = applynkn(tail(fs), first(fs)(x))
+applynkn(fs::Tuple, x, xo) = applynkn(tail(fs), first(fs)(x, xo))
+
+function (nkn::NeuralKernelNetwork)(x; λ=1e-6)
+	N = size(x, 2)
+	x1 = applynkn(nkn.layers, x)
+	K = reshape(x1, N, N)
+	K + Diagonal(λ*ones(N))
+end
+
+function (nkn::NeuralKernelNetwork)(x, xo)
+	M = size(x, 2)
+	N = size(xo, 2)
+	x1 = applynkn(nkn.layers, x, xo)
+	K = reshape(x1, M, N)
+	K
+end
 
 
 """
@@ -26,13 +58,6 @@ function (p::Primitive)(x, xo)
 	Ks = [reshape(Ker(x, xo), 1, :) for Ker in p.kernels]
 	vcat(Ks...)
 end
-
-
-"""
-extend Chain
-"""
-applychain(fs::Tuple, x, xo) = applychain(tail(fs), first(fs)(x, xo))
-(c::Chain)(x, xo) = applychain(c.layers, x, xo)
 
 
 """

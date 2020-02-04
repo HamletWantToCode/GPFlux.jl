@@ -28,3 +28,17 @@ end
 	@test dfdα ≈ Finit_dfdα[1]
 end
 
+@testset "positive constraint" begin
+	Random.seed!(4)
+	x = randn(3, 5)
+	w = rand(3)
+	v = rand(5)
+	f(x) = w'*GPFlux.positive(x)*v
+	g(y) = w'*GPFlux.positive(reshape(y, 3, 5))*v
+
+	dfdx, = gradient(f, x)
+	Finit_dfdx = reshape(Calculus.gradient(g, vec(x)), 3, 5)
+	@test dfdx ≈ Finit_dfdx
+end
+
+

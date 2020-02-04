@@ -1,7 +1,7 @@
 """
 Rational quardratic kernel
 """
-struct ArdRQKernel{T, VT<:AbstractVector{T}}
+struct ArdRQKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	ll::VT
 	lα::VT
 	lσ::VT
@@ -33,7 +33,7 @@ end
 reset(RQK::ArdRQKernel) = ArdRQKernel(length(RQK.ll))
 
 ## derived kernel
-struct IsoRQKernel{T, VT<:AbstractVector{T}}
+struct IsoRQKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	ll::VT
 	lα::VT
 	lσ::VT

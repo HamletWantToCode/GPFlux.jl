@@ -1,7 +1,7 @@
 """
 Linear Kernel
 """
-struct ArdLinearKernel{T, VT<:AbstractVector{T}}
+struct ArdLinearKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	lσb::VT
 	lσv::VT
 	c::VT
@@ -37,7 +37,7 @@ reset(LK::ArdLinearKernel) = ArdLinearKernel(length(LK.c))
 
 
 ## iso kernel
-struct IsoLinearKernel{T, VT<:AbstractVector{T}}
+struct IsoLinearKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	lσv::VT
 end
 @functor IsoLinearKernel
