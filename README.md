@@ -19,11 +19,10 @@ and also install BackwardsLinalg by
 
 
 ## Examples
-For details, please see [notebooks](https://github.com/HamletWantToCode/GPFlux.jl/tree/master/notebook).
-### Simple regression
-
-### Time series prediction
-
+### [Simple regression](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/simple_gpr.ipynb)
+![sin_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/simple_gpr.png)
+### [Time series prediction](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/time_series.ipynb)
+![co2_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/time_series.png)
 
 ## Usage
 Gaussian process is determined by a mean function and a kernel function, they can be specified in GPFlux as follows
