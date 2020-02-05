@@ -35,6 +35,13 @@ end
 
 reset(LK::ArdLinearKernel) = ArdLinearKernel(length(LK.c))
 
+function Base.show(io::IO, kernel::ArdLinearKernel)
+	print(io, "ArdLinearKernel(")
+	print(io, "lσv=", kernel.lσv, ", ", "c=", kernel.c, ", ", "lσb=", kernel.lσb)
+	print(io, ")")
+end
+
+
 
 ## iso kernel
 struct IsoLinearKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
@@ -60,4 +67,8 @@ function IsoLinearKernel()
 end
 
 reset(IKL::IsoLinearKernel) = IsoLinearKernel()
+
+function Base.show(io::IO, kernel::IsoLinearKernel)
+	print(io, "IsoLinearKernel(", "lσv=", kernel.lσv[1], ")")
+end
 

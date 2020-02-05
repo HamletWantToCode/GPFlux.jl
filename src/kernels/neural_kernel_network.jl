@@ -40,6 +40,12 @@ function (nkn::NeuralKernelNetwork)(x, xo)
 	K
 end
 
+function Base.show(io::IO, kernel::NeuralKernelNetwork)
+	print(io, "NeuralKernelNetwork(")
+	join(io, kernel.layers, ", ")
+	print(io, ")")
+end
+
 
 """
 Primitive layer, constituted by basic kernels
@@ -59,11 +65,17 @@ function (p::Primitive)(x, xo)
 	vcat(Ks...)
 end
 
+function Base.show(io::IO, layer::Primitive)
+	print(io, "Primitive(")
+	join(io, layer.kernels, ", ")
+	print(io, ")")
+end
+
 
 """
 Linear layer: weigths & bias should be positive
 """
-positive(x) = @. log(1.0 + exp(x))
+positive(x) = @. log(1.0 + exp(x)) + 1e-6  # plus 1e-6 to avoid this value to be 0.0
 positive_back(x, dy) = @. dy*(1.0/(1.0+exp(-x))) 
 
 struct Linear{WT, BT}
@@ -80,6 +92,10 @@ function Linear(in::Integer, out::Integer; init_W=glorot_uniform, init_b=zeros)
 	Linear(init_W(out, in), init_b(out))
 end
 
+function Base.show(io::IO, layer::Linear)
+	print(io, "Linear(", size(layer.W, 2), ",", size(layer.W, 1), ")")
+end
+
 
 """
 Product layer
@@ -88,7 +104,7 @@ function Product(x; step=2)
 	m, n = size(x)
 	m%step == 0 || error("the first dimension of inputs must be multiple of step")
 	new_x = reshape(x, step, m÷step, n)
-	.*([x[i, :, :] for i in 1:step]...)
+	.*([new_x[i, :, :] for i in 1:step]...)
 end
 
 

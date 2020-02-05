@@ -32,6 +32,14 @@ end
 
 reset(RQK::ArdRQKernel) = ArdRQKernel(length(RQK.ll))
 
+function Base.show(io::IO, kernel::ArdRQKernel)
+	print(io, "ArdRQKernel(")
+	print(io, "ll=", kernel.ll, ", ", "lα=", kernel.lα, ", ", "lσ=", kernel.lσ)
+	print(")")
+end
+
+
+
 ## derived kernel
 struct IsoRQKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
 	ll::VT
@@ -63,4 +71,9 @@ end
 
 reset(IsoRQK::IsoRQKernel) = IsoRQKernel()
 
+function Base.show(io::IO, kernel::IsoRQKernel)
+	print(io, "IsoRQKernel(")
+	print(io, "ll=", kernel.ll[1], ", ", "lα=", kernel.lα[1], ", ", "lσ=", kernel.lσ[1])
+	print(")")
+end
 

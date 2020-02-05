@@ -8,6 +8,10 @@ struct GaussProcess{MT, KT, VT}
 end
 @functor GaussProcess
 
+function Base.show(io::IO, gp::GaussProcess)
+	print(io, "GaussProcess(", gp.mean, ", ", gp.kernel, ", ", "lnoise=", gp.lnoise[1], ")")
+end
+
 
 """
 Construct multivariate normal distribution from GP, facilitate sampling

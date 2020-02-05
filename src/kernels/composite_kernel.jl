@@ -4,8 +4,21 @@ general composite kernel
 const ProductCompositeKernel = NeuralKernelNetwork{Tuple{Primitive, typeof(allProduct)}}
 ProductCompositeKernel(K::Vararg{AbstractKernel, N}) where {N} = ProductCompositeKernel(Primitive(K...), allProduct)
 
+function Base.show(io::IO, kernel::ProductCompositeKernel)
+	print(io, "Product(")
+	join(io, kernel.layers[1].kernels, ", ")
+	print(io, ")")
+end
+
+
 const AddCompositeKernel = NeuralKernelNetwork{Tuple{Primitive, typeof(allSum)}}
 AddCompositeKernel(K::Vararg{AbstractKernel, N}) where {N} = AddCompositeKernel(Primitive(K...), allSum)
+
+function Base.show(io::IO, kernel::AddCompositeKernel)
+	print(io, "Add(")
+	join(io, kernel.layers[1].kernels, ", ")
+	print(io, ")")
+end
 
 
 """

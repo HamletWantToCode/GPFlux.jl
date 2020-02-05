@@ -31,6 +31,13 @@ end
 
 reset(GK::ArdGaussKernel) = ArdGaussKernel(length(GK.ll))
 
+function Base.show(io::IO, kernel::ArdGaussKernel)
+	print(io, "ArdGaussKernel(")
+	print(io, "ll=", kernel.ll, ", ", "lσ=", kernel.lσ)
+	print(io, ")")
+end
+
+
 
 ## iso kernel
 struct IsoGaussKernel{T, VT<:AbstractVector{T}} <: AbstractKernel
@@ -61,4 +68,9 @@ end
 
 reset(IsoGK::IsoGaussKernel) = IsoGaussKernel()
 
+function Base.show(io::IO, kernel::IsoGaussKernel)
+	print(io, "IsoGaussKernel(")
+	print(io, "ll=", kernel.ll[1], ", ", "lσ=", kernel.lσ[1])
+	print(io, ")")
+end
 

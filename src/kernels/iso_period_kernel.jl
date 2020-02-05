@@ -31,4 +31,9 @@ end
 
 reset(IsoPK::IsoPeriodKernel) = IsoPeriodKernel()
 
+function Base.show(io::IO, kernel::IsoPeriodKernel)
+	print(io, "IsoPeriodKernel(")
+	print(io, "lp=", kernel.lp[1], ", ", "ll=", kernel.ll[1], ", ", "lσ=", kernel.lσ[1])
+	print(io, ")")
+end
 

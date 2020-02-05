@@ -13,6 +13,10 @@ end
 
 reset(CM::ConstantMean) = ConstantMean()
 
+function Base.show(io::IO, mean::ConstantMean)
+	print(io, "ConstantMean(", mean.c, ")")
+end
+
 
 """
 simple neural network mean (single layer, linear)
@@ -20,4 +24,6 @@ simple neural network mean (single layer, linear)
 SimpleNeuralNetworkMean(n_features, n_out) = Dense(n_features, n_out)
 
 reset(SNNM::Dense) = Dense(size(SNNM.W, 2), size(SNNM.W, 1))
+
+
 
