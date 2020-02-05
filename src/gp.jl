@@ -10,7 +10,7 @@ end
 
 
 """
-construct multivariate normal distribution from GP
+Construct multivariate normal distribution from GP, facilitate sampling
 """
 function MvNormal(gp::GaussProcess, x::AbstractArray)
 	n = size(x, 2)

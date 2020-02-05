@@ -13,11 +13,11 @@ import Flux: functor
 Neural Kernel Network
 modify https://github.com/FluxML/Flux.jl/tree/master/src/layers/basic.jl Chain
 """
-struct NeuralKernelNetwork{T<:Tuple}
+struct NeuralKernelNetwork{T<:Tuple} <: AbstractKernel
 	layers::T
+	NeuralKernelNetwork{T}(ls...) where {T} = new{T}(ls)
 end
-NeuralKernelNetwork(ls...) = NeuralKernelNetwork{typeof(ls)}(ls)
-NeuralKernelNetwork{T}(ls...) where {T<:Tuple} = NeuralKernelNetwork{T}(ls)
+NeuralKernelNetwork(ls...) = NeuralKernelNetwork{typeof(ls)}(ls...)
 
 functor(nkn::NeuralKernelNetwork) = nkn.layers, ls->NeuralKernelNetwork(ls...)
 
@@ -44,7 +44,7 @@ end
 """
 Primitive layer, constituted by basic kernels
 """
-struct Primitive{T<:Tuple}
+struct Primitive{T<:Tuple{Vararg{<:AbstractKernel}}}
   kernels::T
   Primitive(ks...) = new{typeof(ks)}(ks)
 end

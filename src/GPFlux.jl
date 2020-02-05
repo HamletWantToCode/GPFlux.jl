@@ -30,7 +30,6 @@ export gradient_check, model_gradient_check, reset
 
 include("gp.jl")
 include("mean.jl")
-include("layers.jl")
 include("kernels/kernels.jl")
 include("metrics/metrics.jl")
 include("zygote.jl")
