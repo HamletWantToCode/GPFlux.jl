@@ -54,19 +54,19 @@ One can also build composite kernel by using `ProductCompositeKernel` and `AddCo
 ```julia
 se_kernel = IsoGaussKernel(ll, lσ)
 per_kernel = IsoPeriodKernel(lp, ll, lσ)
-se_mul_periodic_kernel = ProductCompositeKernel((se_kernel, per_kernel))
-se_add_periodic_kernel = AddCompositeKernel((se_kernel, per_kernel))
+se_mul_periodic_kernel = ProductCompositeKernel(se_kernel, per_kernel)
+se_add_periodic_kernel = AddCompositeKernel(se_kernel, per_kernel)
 
 params(se_mul_periodic_kernel) # provide parameters of se_mul_periodic_kernel
 params(se_add_periodic_kernel) # provide parameters of se_add_periodic_kernel
 ```
 
-The most significant feature of GPFlux is that it allows to use Flux's neural network to build mean function and Neural Kernel Network (NKN) to build kernel function ( *Warning: NKN is still in progress* ), computing negative log likelihood and it's gradient is same as above cases.
+The most significant feature of GPFlux is that it allows to use Flux's neural network to build mean function and Neural Kernel Network (NKN) to build kernel function ( *Warning: NKN is still experimental* ), computing negative log likelihood and it's gradient is same as above cases.
 ```julia
 # build the mean function with neural network using Flux
 nn_mean = Chain(Dense(5, 10, relu), Dense(10, 1))
 # build the kernel function with neural kernel network
-nkn = Chain(Primitive(se_kernel, per_kernel), Linear(2, 4), z->Product(z, step=4), z->reshape(z, N, N)) # N is the number of samples in dataset
+nkn = NeuralKernelNetwork(Primitive(se_kernel, per_kernel), Linear(2, 4), z->Product(z, step=4))
 # build GP
 nn_gp = GaussProcess(nn_mean, nkn, lnoise)
 
