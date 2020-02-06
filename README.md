@@ -21,7 +21,7 @@ and also install BackwardsLinalg by
 ## Examples
 ### [Simple regression](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/simple_gpr.ipynb)
 ![sin_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/simple_gpr.png)
-### [Time series prediction](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/time_series.ipynb)
+### [Time series prediction](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/time_series_NKN.ipynb)
 ![airline_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/time_series.png)
 
 ## Usage
