@@ -22,7 +22,7 @@ and also install BackwardsLinalg by
 ### [Simple regression](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/simple_gpr.ipynb)
 ![sin_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/simple_gpr.png)
 ### [Time series prediction](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/notebook/time_series.ipynb)
-![co2_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/time_series.png)
+![airline_regr](https://github.com/HamletWantToCode/GPFlux.jl/blob/master/assets/time_series.png)
 
 ## Usage
 Gaussian process is determined by a mean function and a kernel function, they can be specified in GPFlux as follows
@@ -61,7 +61,7 @@ params(se_mul_periodic_kernel) # provide parameters of se_mul_periodic_kernel
 params(se_add_periodic_kernel) # provide parameters of se_add_periodic_kernel
 ```
 
-The most significant feature of GPFlux is that it allows to use Flux's neural network to build mean function and Neural Kernel Network (NKN) to build kernel function ( *Warning: NKN is still experimental* ), computing negative log likelihood and it's gradient is same as above cases.
+The most significant feature of GPFlux is that it allows to use Flux's neural network to build mean function and Neural Kernel Network (NKN) to build kernel function, the computation of negative log likelihood and it's gradient is same as above cases.
 ```julia
 # build the mean function with neural network using Flux
 nn_mean = Chain(Dense(5, 10, relu), Dense(10, 1))
