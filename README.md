@@ -9,10 +9,6 @@ Installing GPFlux requires run the following code in a Julia REPL:
 ```julia
 ] add GPFlux
 ```
-and also install BackwardsLinalg by
-```julia
-] add git@github.com:HamletWantToCode/BackwardsLinalg.jl.git
-```
 
 ## Brief introduction to GP
 [Gaussian processe](http://www.gaussianprocess.org/gpml/chapters/RW1.pdf) is a powerful algorithm in statistical machine learning and probabilistic modelling, it models the underlying distribution of a dataset by a prior belief ( which is a parametrized multivariate normal distribution ) and a Gaussian likelihood, learning is done by maximizing the log likelihood (MLE), which is tractable for Gaussian process. Gaussian process is widely used in surrogate function modelling, geostatitics, pattern recognition, etc.
