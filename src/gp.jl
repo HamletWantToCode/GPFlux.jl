@@ -53,7 +53,8 @@ function predict(gp::GaussProcess, x, x_old, y_old; λ=1e-6)
 	Σ_no = gp.kernel(x, x_old)
 	Σ_nn = gp.kernel(x, λ=λ)
 
-	L = BackwardsLinalg.cholesky(Σ_oo)
+	C = cholesky(Σ_oo)
+	L = C.L
 	ȳo = y_old .- μo
 	zo = L \ ȳo
 	α = L' \ zo
