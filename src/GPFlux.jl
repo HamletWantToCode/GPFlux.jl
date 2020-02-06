@@ -1,7 +1,7 @@
 module GPFlux
 
 using LinearAlgebra
-using BackwardsLinalg
+# using BackwardsLinalg
 using Flux
 using Flux: @functor, params
 import Base: reset

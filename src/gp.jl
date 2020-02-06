@@ -33,7 +33,9 @@ function negloglik(gp::GaussProcess, x, y; λ=1e-6)
 	Σ = gp.kernel(x, λ=λ) + Diagonal(exp(2*gp.lnoise[1])*ones(size(x, 2)))
 
   d = length(y)
-  L = BackwardsLinalg.cholesky(Σ)
+  # L = BackwardsLinalg.cholesky(Σ)
+	C = cholesky(Σ)
+	L = C.L
 	ȳ = y .- μ
 	z = L \ ȳ
   0.5*dot(z, z) + (d/2.0)*log(2π) + logdet(L)
