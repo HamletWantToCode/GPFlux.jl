@@ -1,8 +1,12 @@
 # GPFlux.jl
 
-A new Gaussian process package, compare to existing ones ([GaussianProcesses.jl](https://github.com/STOR-i/GaussianProcesses.jl.git), [Stheno.jl](https://github.com/willtebbutt/Stheno.jl.git)), it use [Zygote](https://github.com/FluxML/Zygote.jl.git) to compute derivatives w.r.t model parameters, and is also compatible with [Flux](https://github.com/FluxML/Flux.jl.git), which enables user to integrate deep neural network into Gaussian process model (e.g. use neural network as mean function or kernel function).
+A new Gaussian process package, which facilitates user to integrate deep neural network into Gaussian process model (e.g. use neural network as mean function or kernel function to improve the power of their GP model). It use [Zygote](https://github.com/FluxML/Zygote.jl.git) to compute derivatives w.r.t model parameters, and is naturally compatible with [Flux](https://github.com/FluxML/Flux.jl.git).
 
-This package is still under development, **suggestions**, **bug report** and **pull request** are welcome :)
+## Key features
+* Building the GP mean function with a Flux's neural network
+* Building various composite kernels on top of neural kernel network
+
+This package is still under development, **suggestions**, **bug report** and **pull request** are welcome :), detailed documentation will come later...
 
 ## Installation
 Installing GPFlux requires run the following code in a Julia REPL:
