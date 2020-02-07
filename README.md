@@ -2,9 +2,9 @@
 
 A new Gaussian process package, which facilitates user to integrate deep neural network into Gaussian process model (e.g. use neural network as mean function or kernel function to improve the power of their GP model). It use [Zygote](https://github.com/FluxML/Zygote.jl.git) to compute derivatives w.r.t model parameters, and is naturally compatible with [Flux](https://github.com/FluxML/Flux.jl.git).
 
-## Key features
+**Key features**
 * Building the GP mean function with a Flux's neural network
-* Building various composite kernels on top of neural kernel network
+* Implement neural kernel network (arxiv 1806.04326), which makes it easy to build various composite kernels
 
 This package is still under development, **suggestions**, **bug report** and **pull request** are welcome :), detailed documentation will come later...
 
