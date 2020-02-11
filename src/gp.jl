@@ -13,16 +13,6 @@ function Base.show(io::IO, gp::GaussProcess)
 end
 
 
-"""
-Construct multivariate normal distribution from GP, facilitate sampling
-"""
-function MvNormal(gp::GaussProcess, x::AbstractArray)
-	n = size(x, 2)
-	μ = reshape(gp.mean(x), n)
-	K = gp.kernel(x) + Diagonal(exp(2*gp.lnoise[1])*ones(n))
-	MvNormal(μ, K)
-end
-
 
 """
 loss function, negative log likelihood

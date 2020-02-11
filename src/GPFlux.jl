@@ -1,11 +1,9 @@
 module GPFlux
 
 using LinearAlgebra
-# using BackwardsLinalg
 using Flux
 using Flux: @functor, params
 import Base: reset
-import Distributions: MvNormal
 
 
 export GaussProcess, MvNormal, negloglik, predict, params, dispatch!, flatten_params
@@ -29,6 +27,7 @@ export gradient_check, model_gradient_check, reset
 
 
 include("gp.jl")
+include("distribution_pack.jl")
 include("mean.jl")
 include("kernels/kernels.jl")
 include("metrics/metrics.jl")

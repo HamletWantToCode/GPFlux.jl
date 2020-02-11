@@ -48,7 +48,7 @@ end
 
 
 """
-Primitive layer, constituted by basic kernels
+Primitive layer, constituted from basic kernels
 """
 struct Primitive{T<:Tuple{Vararg{<:AbstractKernel}}}
   kernels::T

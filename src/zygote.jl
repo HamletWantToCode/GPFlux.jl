@@ -1,4 +1,4 @@
-using Zygote: @adjoint
+using Zygote: @adjoint, pullback
 using Flux: Optimise
 
 
@@ -26,6 +26,23 @@ power(x, α) = x.^α
 		α*(@. dy*x^(α-1)), tr(dy'* (@. y*log(x)))
 	end
 end
+
+@adjoint function rand(mvn::MvNormal, N::Int)
+  ϵ = randn(length(mvn), N)
+  L, chol_back = pullback(chol_tril, mvn.Σ)
+  y = mvn.μ .+ L*ϵ
+  y, function (ȳ)
+    μ̄ = sum(ȳ, dims=2)
+    L̄ = zero(L)
+    for i in 1:N
+      L̄ += ȳ[:,i] * ϵ[:,i]'
+    end
+    Σ̄_half, = chol_back(L̄)
+    Σ̄ = 0.5*(Σ̄_half + Σ̄_half')
+    (μ=μ̄, Σ=Σ̄), nothing
+  end
+end
+
 
 
 # gradient check for functions
